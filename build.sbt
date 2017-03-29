@@ -534,6 +534,8 @@ lazy val scalap = configureAsSubproject(project)
     description := "Scala Bytecode Parser",
     organization := "org.scala-ide",
     version := "2.12.1",
+    publishMavenStyle := true,
+    publishArtifact in Test := false,
     publishTo <<= isSnapshot { isSnapshot =>
       val nexus = "https://oss.sonatype.org"
       if (isSnapshot)
@@ -541,6 +543,21 @@ lazy val scalap = configureAsSubproject(project)
       else
         Some("releases"  at s"$nexus/service/local/staging/deploy/maven2")
     },
+    publishArtifact in Test := false,
+    pomExtra := (
+      <scm>
+        <connection>scm:git:https://github.com/scala-ide/scala.git</connection>
+        <developerConnection>scm:git:git@github.com:scala-ide/scala.git</developerConnection>
+        <tag>v2.12.1-IDE</tag>
+        <url>https://github.com/scala-ide/scala</url>
+      </scm>
+      <developers>
+        <developer>
+          <id>wpopielarski</id>
+          <name>Wieslaw Popielarski</name>
+          <email>wpopielarski@virtuslab.com</email>
+        </developer>
+      </developers>),
     credentials ++= {
       val config = Path.userHome / ".m2" / "credentials"
       if (config.exists) Seq(Credentials(config))
@@ -552,12 +569,12 @@ lazy val scalap = configureAsSubproject(project)
       }.toSeq
     },
     // Include decoder.properties
-    includeFilter in unmanagedResources in Compile := "*.properties",
-    fixPom(
-      "/project/name" -> <name>Scalap</name>,
-      "/project/description" -> <description>bytecode analysis tool</description>,
-      "/project/properties" -> scala.xml.Text("")
-    )
+    includeFilter in unmanagedResources in Compile := "*.properties"
+    //fixPom(
+    //  "/project/name" -> <name>Scalap</name>,
+    //  "/project/description" -> <description>bytecode analysis tool</description>,
+    //  "/project/properties" -> scala.xml.Text("")
+    //)
   )
   .dependsOn(compiler)
 

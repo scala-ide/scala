@@ -20,3 +20,5 @@ buildInfoKeys := Seq[BuildInfoKey](buildClasspath)
 buildInfoPackage := "scalabuild"
 
 libraryDependencies += "com.typesafe" %% "mima-reporter" % "0.1.12"
+
+addSbtPlugin("com.jsuereth" % "sbt-pgp" % "1.0.0")
