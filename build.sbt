@@ -534,6 +534,23 @@ lazy val scalap = configureAsSubproject(project)
     description := "Scala Bytecode Parser",
     organization := "org.scala-ide",
     version := "2.12.1",
+    publishTo <<= isSnapshot { isSnapshot =>
+      val nexus = "https://oss.sonatype.org"
+      if (isSnapshot)
+        Some("snapshots" at s"$nexus/content/repositories/snapshots")
+      else
+        Some("releases"  at s"$nexus/service/local/staging/deploy/maven2")
+    },
+    credentials ++= {
+      val config = Path.userHome / ".m2" / "credentials"
+      if (config.exists) Seq(Credentials(config))
+      else {
+        for {
+          username <- sys.env.get("SONATYPE_USERNAME")
+          password <- sys.env.get("SONATYPE_PASSWORD")
+        } yield Credentials("Sonatype Nexus Repository Manager", "oss.sonatype.org", username, password)
+      }.toSeq
+    },
     // Include decoder.properties
     includeFilter in unmanagedResources in Compile := "*.properties",
     fixPom(
