@@ -532,6 +532,8 @@ lazy val scaladoc = configureAsSubproject(project)
 lazy val scalap = configureAsSubproject(project)
   .settings(
     description := "Scala Bytecode Parser",
+    organization := "org.scala-ide",
+    version := "2.12.1",
     // Include decoder.properties
     includeFilter in unmanagedResources in Compile := "*.properties",
     fixPom(
